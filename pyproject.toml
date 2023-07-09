@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "all-the-millionairs"
+version = "0.1.0"
+description = ""
+authors = ["gergokoncz <gergokoncz06@gmail.com>"]
+readme = "README.md"
+packages = [{include = "all_the_millionairs"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+streamlit = "^1.24.1"
+pandas = "^2.0.3"
+black = "^23.3.0"
+plotly = "^5.15.0"
+streamlit-lottie = "^0.0.5"
+htbuilder = "^0.6.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
