@@ -48,6 +48,7 @@ st.set_page_config(layout="wide")
 
 ## Get data from API
 
+
 def get_currencies(date=today) -> Any:
     currency_url = f"https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@{apiVersion}/{date}/currencies.json"
     return requests.get(currency_url).json()
@@ -57,10 +58,12 @@ def get_exchange_rates(date=today) -> Any:
     exchange_url = f"https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@{apiVersion}/{date}/currencies/eur.json"
     return requests.get(exchange_url).json()
 
+
 def load_lottie_url(url: str):
     r = requests.get(url)
     if r.status_code == 200:
         return r.json()
+
 
 currency_names = get_currencies(date="latest")
 exchange_rates = get_exchange_rates(date="latest")
@@ -106,15 +109,33 @@ plot_col1, plot_col2 = st.columns(2)
 
 with plot_col1:
     # st.write(df)
-    st.caption("Here are the top 5 currencies in which your wealth is pretty close to reach 1 million.")
+    st.caption(
+        "Here are the top 5 currencies in which your wealth is pretty close to reach 1 million."
+    )
     close_ones = df.query("amount < 1e6")[["amount", "currency"]].head(5)
-    fig = px.bar(close_ones, x="currency", y="amount", title="Closest ones", template=plotly_theme, width=400)# height=400)
+    fig = px.bar(
+        close_ones,
+        x="currency",
+        y="amount",
+        title="Closest ones",
+        template=plotly_theme,
+        width=400,
+    )  # height=400)
     st.plotly_chart(fig, use_container_width=True)
 
 with plot_col2:
-    st.caption(f"As of {exchange_rates['date']} there are {len(df)} currencies and cryptos to compare to in this site and you are a millionaire in {df['millionaire'].sum()} of them.")
+    st.caption(
+        f"As of {exchange_rates['date']} there are {len(df)} currencies and cryptos to compare to in this site and you are a millionaire in {df['millionaire'].sum()} of them."
+    )
 
-    fig = px.pie(df, values="unit", names="millionaire", title="Millionaire?", template=plotly_theme, width=400)# height=400
+    fig = px.pie(
+        df,
+        values="unit",
+        names="millionaire",
+        title="Millionaire?",
+        template=plotly_theme,
+        width=400,
+    )  # height=400
     st.plotly_chart(fig, use_container_width=True)
 
 # st.bar_chart(df, x="currency", y="amount")
@@ -124,76 +145,85 @@ st.divider()
 
 st.markdown("## Major currencies")
 
-st.caption("Here you can see your wealth in major currencies and check how much you need to be a millionaire in each of them.")
+st.caption(
+    "Here you can see your wealth in major currencies and check how much you need to be a millionaire in each of them."
+)
 
 no_margin_layout = go.Layout(
     margin=go.layout.Margin(
-        l=0, #left margin
-        r=0, #right margin
-        b=0, #bottom margin
-        t=0  #top margin
+        l=0, r=0, b=0, t=0  # left margin  # right margin  # bottom margin  # top margin
     )
 )
 
 benchmark_cols = st.columns(5)
 
 with benchmark_cols[0]:
-
-    eur_fig = go.Figure(go.Indicator(
-        mode = "number+delta",
-        value = wealth_in_eur,
-        delta = {'position': "top", 'reference': 1_000_000},
-        title = {'text': "EUR"},
-        domain = {'x': [0, 1], 'y': [0, 1]},
-    ), layout=no_margin_layout)
+    eur_fig = go.Figure(
+        go.Indicator(
+            mode="number+delta",
+            value=wealth_in_eur,
+            delta={"position": "top", "reference": 1_000_000},
+            title={"text": "EUR"},
+            domain={"x": [0, 1], "y": [0, 1]},
+        ),
+        layout=no_margin_layout,
+    )
 
     st.plotly_chart(eur_fig, use_container_width=True)
 
 with benchmark_cols[1]:
-
-    usd_fig = go.Figure(go.Indicator(
-        mode = "number+delta",
-        value = wealth_in_eur * exchange_rates["eur"]["usd"],
-        delta = {'position': "top", 'reference': 1_000_000},
-        title = {'text': "USD"},
-        domain = {'x': [0, 1], 'y': [0, 1]},
-    ), layout=no_margin_layout)
+    usd_fig = go.Figure(
+        go.Indicator(
+            mode="number+delta",
+            value=wealth_in_eur * exchange_rates["eur"]["usd"],
+            delta={"position": "top", "reference": 1_000_000},
+            title={"text": "USD"},
+            domain={"x": [0, 1], "y": [0, 1]},
+        ),
+        layout=no_margin_layout,
+    )
 
     st.plotly_chart(usd_fig, use_container_width=True)
 
 with benchmark_cols[2]:
-
-    jpy_fig = go.Figure(go.Indicator(
-        mode = "number+delta",
-        value = wealth_in_eur * exchange_rates["eur"]["jpy"],
-        delta = {'position': "top", 'reference': 1_000_000},
-        title = {'text': "JPY"},
-        domain = {'x': [0, 1], 'y': [0, 1]},
-    ), layout=no_margin_layout)
+    jpy_fig = go.Figure(
+        go.Indicator(
+            mode="number+delta",
+            value=wealth_in_eur * exchange_rates["eur"]["jpy"],
+            delta={"position": "top", "reference": 1_000_000},
+            title={"text": "JPY"},
+            domain={"x": [0, 1], "y": [0, 1]},
+        ),
+        layout=no_margin_layout,
+    )
 
     st.plotly_chart(jpy_fig, use_container_width=True)
 
 with benchmark_cols[3]:
-
-    aud_fig = go.Figure(go.Indicator(
-        mode = "number+delta",
-        value = wealth_in_eur * exchange_rates["eur"]["aud"],
-        delta = {'position': "top", 'reference': 1_000_000},
-        title = {'text': "AUD"},
-        domain = {'x': [0, 1], 'y': [0, 1]},
-    ), layout=no_margin_layout)
+    aud_fig = go.Figure(
+        go.Indicator(
+            mode="number+delta",
+            value=wealth_in_eur * exchange_rates["eur"]["aud"],
+            delta={"position": "top", "reference": 1_000_000},
+            title={"text": "AUD"},
+            domain={"x": [0, 1], "y": [0, 1]},
+        ),
+        layout=no_margin_layout,
+    )
 
     st.plotly_chart(aud_fig, use_container_width=True)
 
 with benchmark_cols[4]:
-
-    eth_fig = go.Figure(go.Indicator(
-        mode = "number+delta",
-        value = wealth_in_eur * exchange_rates["eur"]["eth"],
-        delta = {'position': "top", 'reference': 1_000_000},
-        title = {'text': "ETH"},
-        domain = {'x': [0, 1], 'y': [0, 1]},
-    ), layout=no_margin_layout)
+    eth_fig = go.Figure(
+        go.Indicator(
+            mode="number+delta",
+            value=wealth_in_eur * exchange_rates["eur"]["eth"],
+            delta={"position": "top", "reference": 1_000_000},
+            title={"text": "ETH"},
+            domain={"x": [0, 1], "y": [0, 1]},
+        ),
+        layout=no_margin_layout,
+    )
 
     st.plotly_chart(eth_fig, use_container_width=True)
 
